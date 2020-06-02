@@ -17,7 +17,7 @@ from user.controllers import user
 
 import sys
 #########################
-from keras.models import load_model
+# from keras.models import load_model
 import cv2
 import numpy as np
 #########################

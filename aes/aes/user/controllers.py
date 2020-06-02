@@ -35,42 +35,42 @@ def tambahLogs(logs):
 	f.write(logs)
 	f.close()
 
-def encrypt(data):
-	#encode
-	key = "tWBbsFB6EN5FXYhz"
-	iv = "4CDxzzA0K4f5SsAH"
-	# key1 = get_random_bytes(16)
-	# key2 = get_random_bytes(16)
-	word = data
+# def encrypt(data):
+# 	#encode
+# 	key = "tWBbsFB6EN5FXYhz"
+# 	iv = "4CDxzzA0K4f5SsAH"
+# 	# key1 = get_random_bytes(16)
+# 	# key2 = get_random_bytes(16)
+# 	word = data
 
-	def set_text(text):
-	    t = []
-	    for i in text:
-	        t.append(i)
+# 	def set_text(text):
+# 	    t = []
+# 	    for i in text:
+# 	        t.append(i)
 
-	    min = 16 - (len(t) % 16) -1
-	    if str(min) != "0":
-	        new = ''.join(random.choice(string.ascii_uppercase) for _ in range(min))
-	        text = text+"#"+new
-	    return text
+# 	    min = 16 - (len(t) % 16) -1
+# 	    if str(min) != "0":
+# 	        new = ''.join(random.choice(string.ascii_uppercase) for _ in range(min))
+# 	        text = text+"#"+new
+# 	    return text
 
-	text16 = set_text(word)
+# 	text16 = set_text(word)
 
-	decryptor = AES.new(key, AES.MODE_CBC, iv)
-	aes_enc = decryptor.encrypt(text16)
+# 	decryptor = AES.new(key, AES.MODE_CBC, iv)
+# 	aes_enc = decryptor.encrypt(text16)
 
-	# key1 = base64.b64encode(key1).decode('utf-8')
-	# key2 = base64.b64encode(key2).decode('utf-8')
+# 	# key1 = base64.b64encode(key1).decode('utf-8')
+# 	# key2 = base64.b64encode(key2).decode('utf-8')
 
-	key = base64.b64encode(key).decode('utf-8')
-	iv = base64.b64encode(iv).decode('utf-8')
+# 	key = base64.b64encode(key).decode('utf-8')
+# 	iv = base64.b64encode(iv).decode('utf-8')
 
-	# print("key1 : %s \nkey2 : %s" % (key1,key2))
-	print("key : %s \niv : %s" % (key,iv))
+# 	# print("key1 : %s \nkey2 : %s" % (key1,key2))
+# 	print("key : %s \niv : %s" % (key,iv))
 
-	encoded = base64.b64encode(aes_enc).decode('utf-8')
-	print("encode : %s" % encoded)
-	return encoded
+# 	encoded = base64.b64encode(aes_enc).decode('utf-8')
+# 	print("encode : %s" % encoded)
+# 	return encoded
 
 
 
@@ -98,8 +98,8 @@ def get_user():
 	dt = Data()
 	rowCount = dt.row_count(query, values)
 	hasil = dt.get_data_lim(query, values, page)
-	hasil_akhir = encrypt(hasil)
-	hasil = {'data': hasil_akhir , 'status_code': 200, 'page': page, 'offset': '10', 'row_count': rowCount}
+	# hasil_akhir = encrypt(hasil)
+	hasil = {'data': hasil , 'status_code': 200, 'page': page, 'offset': '10', 'row_count': rowCount}
 	########## INSERT LOG ##############
 	imd = ImmutableMultiDict(request.args)
 	imd = imd.to_dict()
