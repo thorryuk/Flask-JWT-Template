@@ -1,4 +1,4 @@
-# Project Name
+# FLASK JWT TEMPLATE
 
 Rest API template using flask
 
