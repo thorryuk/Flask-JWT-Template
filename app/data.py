@@ -1,5 +1,5 @@
 #model 
-from database import conn, select, select2, insert, insert2, select_row
+from .database import conn, select, select2, insert, insert2, select_row
 
 #Class 
 class Data:

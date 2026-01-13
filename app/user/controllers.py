@@ -1,23 +1,23 @@
 from flask import Blueprint, jsonify, request, make_response
-from flask_jwt import JWT, jwt_required, current_identity
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from flask import current_app as app
 from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 import hashlib
 import datetime
 import requests
-import cv2
-from models import Data
+# import cv2
+from .models import Data
 from time import gmtime, strftime
 import os
-import numpy as np
+# import numpy as np
 import base64
 import random
 import warnings
 from werkzeug.datastructures import ImmutableMultiDict
 import string
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
+# from Crypto.Cipher import AES
+# from Crypto.Random import get_random_bytes
 
 
 
@@ -25,10 +25,10 @@ now = datetime.datetime.now()
 
 user = Blueprint('user', __name__, static_folder = '../../upload/foto_user', static_url_path="/media")
 #UNTUK SAVE GAMBAR
-def save(encoded_data, filename):
-	arr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
-	img = cv2.imdecode(arr, cv2.IMREAD_UNCHANGED)
-	return cv2.imwrite(filename, img)
+# def save(encoded_data, filename):
+# 	arr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
+# 	img = cv2.imdecode(arr, cv2.IMREAD_UNCHANGED)
+# 	return cv2.imwrite(filename, img)
 
 def tambahLogs(logs):
 	f = open(app.config['LOGS'] + "/" + secure_filename(strftime("%Y-%m-%d"))+ ".txt", "a")
@@ -123,10 +123,11 @@ def insert_user():
 		foto = data['foto']
 		
 		filename = secure_filename(strftime("%Y-%m-%d %H:%M:%S")+"_foto_user.png")
-		save(foto, os.path.join(app.config['UPLOAD_FOLDER_GAMBAR_user'], filename))
+		# save(foto, os.path.join(app.config['UPLOAD_FOLDER_GAMBAR_user'], filename))
 
 		dt = Data()
-		values = (user1, pass_ency, nama, no_telepon, alamat, filename, jk, tanggal_lahir)
+		# values = (user1, pass_ency, nama, no_telepon, alamat, filename, jk, tanggal_lahir)
+		values = (user1, filename)
 		dt.insert_data(query,values)
 
 		hasil = "berhasil"
@@ -163,7 +164,7 @@ def update_user():
 			query = query + ", foto = %s"
 
 			filename = secure_filename(strftime("%Y-%m-%d %H:%M:%S")+"_foto_user.png")
-			save(foto, os.path.join(app.config['UPLOAD_FOLDER_GAMBAR_user'], filename))
+			# save(foto, os.path.join(app.config['UPLOAD_FOLDER_GAMBAR_user'], filename))
 			
 			values = values + (filename, )
 

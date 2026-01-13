@@ -1,5 +1,5 @@
-from flask import Flask, jsonify, request, make_response, render_template, redirect
-from flask_jwt import JWT, jwt_required, current_identity
+from flask import Flask, jsonify, make_response, redirect
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from flask_cors import CORS, cross_origin
 import json
 import datetime
@@ -9,17 +9,17 @@ import base64
 import random
 import hashlib
 import warnings
-from data import Data
+from .data import Data
 from werkzeug.utils import secure_filename
 
 # from contoh.controllers import contoh
-from user.controllers import user
+from .user.controllers import user
 
 import sys
 #########################
 # from keras.models import load_model
-import cv2
-import numpy as np
+# import cv2
+# import numpy as np
 #########################
 
 warnings.simplefilter("ignore", DeprecationWarning)
@@ -48,7 +48,7 @@ class User(object): #Class USer untuk API Auth
 #@app.route('/verip',methods=['POST'])
 def verify(username, password): #menerima input JSON
 	if not (username and password): #jika username dan password kosong
-	  return False
+		return False
 	pass_ency = hashlib.md5(password.encode('utf-8')).hexdigest() #ubah password jadi md5 karena db jg md5
 
 	values 	= (username, pass_ency)
@@ -73,10 +73,10 @@ def verify(username, password): #menerima input JSON
 	return User(id=id_)
 
 def identity(payload): #funhsi payload
-    id_ = payload['identity'].split("#") #identity payload berisi user id
-    return {"user_id": id_[0],"roles":id_[1]} #kembalikan dalam bentuk json
+	id_ = payload['identity'].split("#") #identity payload berisi user id
+	return {"user_id": id_[0],"roles":id_[1]} #kembalikan dalam bentuk json
 
-jwt = JWT(app, verify, identity) #panggil Java Web Token
+jwt = JWTManager(app, verify, identity) #panggil Java Web Token
 #--------------------- JWT AUTHENTICATION ------------------------
 
 @app.route('/aktivasi/<token>',methods=['GET'])
@@ -104,17 +104,17 @@ def aktivasi(token):
 @jwt_required() #menandakan harus memasukan token credential
 @cross_origin()
 def cek_credential():
-    values = (str(current_identity['user_id']),)
-    query = "SELECT a.*, b.email, b.nama, b.no_telepon, b.alamat, b.foto, b.jk, b.tanggal_lahir, b.is_aktif FROM customer a, user b WHERE a.id_user = b.id_user AND b.is_aktif = '1' AND a.id_user = %s" 
-    dt = Data()
-    hasil = dt.get_data(query, values)
-    if len(hasil) == 0:
-        query = "SELECT a.id_admin, a.id_user, a.posisi, b.email, b.nama, b.no_telepon, b.alamat, b.foto, b.jk, b.tanggal_lahir, b.is_aktif as is_aktif_user, a.is_aktif as is_aktif_admin FROM admin a, user b WHERE a.id_user = b.id_user AND a.is_aktif = 1 AND b.is_aktif = 1 AND a.id_user = %s" # cari admin
-        dt = Data()
-        hasil = dt.get_data(query, values)
-        if len(hasil) == 0:
-        	return False
-    return jsonify(hasil)
+	values = (str(get_jwt_identity['user_id']),)
+	query = "SELECT a.*, b.email, b.nama, b.no_telepon, b.alamat, b.foto, b.jk, b.tanggal_lahir, b.is_aktif FROM customer a, user b WHERE a.id_user = b.id_user AND b.is_aktif = '1' AND a.id_user = %s" 
+	dt = Data()
+	hasil = dt.get_data(query, values)
+	if len(hasil) == 0:
+		query = "SELECT a.id_admin, a.id_user, a.posisi, b.email, b.nama, b.no_telepon, b.alamat, b.foto, b.jk, b.tanggal_lahir, b.is_aktif as is_aktif_user, a.is_aktif as is_aktif_admin FROM admin a, user b WHERE a.id_user = b.id_user AND a.is_aktif = 1 AND b.is_aktif = 1 AND a.id_user = %s" # cari admin
+		dt = Data()
+		hasil = dt.get_data(query, values)
+		if len(hasil) == 0:
+			return False
+	return jsonify(hasil)
 
 #-------------------- END JWT AUTHENTICATION ------------------------
 #--------------------- ERROR HANDLER ------------------------
@@ -131,9 +131,9 @@ def not_found(error):
 	return make_response(jsonify({'error': 'Error Server','status_code':500}), 500)
 #-------------------- END ERROR HANDLER ------------------------
 def tambahLogs(logs):
-    f = open(app.config['LOGS'] + "/" + secure_filename(strftime("%Y-%m-%d"))+ ".txt", "a")
-    f.write(logs)
-    f.close()
+	f = open(app.config['LOGS'] + "/" + secure_filename(strftime("%Y-%m-%d"))+ ".txt", "a")
+	f.write(logs)
+	f.close()
 
 #--------------------- REGISTER BLUEPRINT ------------------------
 # app.register_blueprint(contoh, url_prefix='/contoh')
