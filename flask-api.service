@@ -1,0 +1,17 @@
+[Unit]
+Description=Flask API
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/opt/flask-api
+EnvironmentFile=/opt/flask-api/env/dev.env
+ExecStart=/opt/flask-api/venv/bin/gunicorn \
+    -w 2 \
+    -b 127.0.0.1:5100 \
+    app.app:create_app
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
