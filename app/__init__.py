@@ -1,11 +1,11 @@
-import datetime, warnings
+import datetime, warnings, os
 
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 # from .contoh.controllers import contoh
-# from .user.controllers import user
+from .user.controllers import user
 
 warnings.simplefilter("ignore", DeprecationWarning)
 jwt = JWTManager()
@@ -13,6 +13,12 @@ jwt = JWTManager()
 def create_app():
 	#-------------- CONFIGURATION ------------------------
 	app = Flask(__name__, static_url_path=None) #panggil modul flask
+
+	app.config["DB_HOST"] = os.getenv("DB_HOST")
+	app.config["DB_USER"] = os.getenv("DB_USER")
+	app.config["DB_PASS"] = os.getenv("DB_PASS")
+	app.config["DB_NAME"] = os.getenv("DB_NAME")
+	app.config["DB_PORT"] = os.getenv("DB_PORT")
 
 	app.config['CORS_HEADERS'] = 'Content-Type'
 	app.config["SECRET_KEY"] = "R4h4s!AD0n6"
@@ -45,7 +51,7 @@ def create_app():
 
 	#--------------------- REGISTER BLUEPRINT ------------------------
 	# app.register_blueprint(contoh, url_prefix='/contoh')
-	# app.register_blueprint(user, url_prefix='/user')
+	app.register_blueprint(user, url_prefix='/user')
 	#-------------------- END REGISTER BLUEPRINT ------------------------
 
 	print("===> Application Initialized <===")

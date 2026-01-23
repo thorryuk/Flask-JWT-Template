@@ -1,28 +1,31 @@
 #model 
 from .database import conn, select, select2, insert, insert2, select_row
+from flask import current_app
 
 #Class 
 class Data:
-	def __init__(self):
-		self.mydb = conn()
-
-	#Fungsi ambil data dokter
+	#Fungsi ambil data
 	def get_data(self, query, values):
-		return select(query, values, self.mydb)
+		db = conn(current_app)
+		return select(query, values, db)
 
 	def get_data_row(self, query, values):
-		return select_row(query, values, self.mydb)	
+		db = conn(current_app)
+		return select_row(query, values, db)	
 
-	#Fungsi ambil data dokter
+	#Fungsi ambil data
 	def insert_data(self, query, val):
-		return insert(query, val, self.mydb)
+		db = conn(current_app)
+		return insert(query, val, db)
 
 	def insert_data_last_row(self, query, val):
-		return insert2(query, val, self.mydb)
+		db = conn(current_app)
+		return insert2(query, val, db)
 
 	#Fungsi ambil data login
 	def get_login(self, query, values):
-		mycursor = self.mydb.cursor()
+		db = conn(current_app)
+		mycursor = db.cursor()
 		mycursor.execute(query, values)
 		row_headers = [x[0] for x in mycursor.description]
 		myresult = mycursor.fetchall()
@@ -30,4 +33,5 @@ class Data:
 
 	#Fungsi ambil data user
 	def get_user(self, query, values):
-		return select(query, values, self.mydb)
+		db = conn(current_app)
+		return select(query, values, db)

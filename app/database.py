@@ -1,14 +1,13 @@
-import json
-import os
 import mysql.connector
 
 #koneksi ke database
-def conn(user="root", password="coba21", host="localhost", database="aes"):
+def conn(app):
 	conn = mysql.connector.connect(
-		host=host,
-		user=user,
-		passwd=password,
-		database=database
+		host=app.config['DB_HOST'],
+		user=app.config['DB_USER'],
+		passwd=app.config['DB_PASS'],
+		database=app.config['DB_NAME'],
+		port=app.config['DB_PORT']
 	)
 	return conn
 
