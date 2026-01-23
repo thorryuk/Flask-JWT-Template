@@ -5,8 +5,8 @@ class UserRepository:
         self.db = Data()
 
     def get_all(self, page=1):
-        query = "SELECT * FROM user WHERE is_active = 1"
-        return self.db.get_data_lim(query, (), page)
+        query = "SELECT * FROM users WHERE is_active = 1"
+        return self.db.get_data(query, ())
 
     def insert(self, dto):
         query = """
