@@ -7,6 +7,9 @@ class UserService:
 
     def list_users(self, page=1):
         return self.repo.get_all(page)
+    
+    def list_user_uuid(self, param):
+        return self.repo.get_user_uuid(param)
 
     def create_user(self, payload: dict):
         dto = UserCreateDTO(payload)

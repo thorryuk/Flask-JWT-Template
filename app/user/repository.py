@@ -7,6 +7,10 @@ class UserRepository:
     def get_all(self, page=1):
         query = "SELECT * FROM users WHERE is_active = 1"
         return self.db.get_data(query, ())
+    
+    def get_user_uuid(self, uuid):
+        query = "SELECT * FROM users WHERE uuid = %s"
+        return self.db.get_data(query, (uuid, ))
 
     def insert(self, dto):
         query = """
