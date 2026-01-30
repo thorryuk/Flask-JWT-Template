@@ -5,7 +5,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 # from .contoh.controllers import contoh
-from .user.controllers import user
+from .public.user.controllers import user
 
 warnings.simplefilter("ignore", DeprecationWarning)
 jwt = JWTManager()

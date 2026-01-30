@@ -1,4 +1,4 @@
-from app.data import Data
+from app.common.data import Data
 
 class UserRepository:
     def __init__(self):
